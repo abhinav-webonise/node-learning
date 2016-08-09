@@ -1,7 +1,6 @@
 var http = require("http");
 var url = require("url");
 var formidable = require("formidable");
-var sys = require("sys");
 
 function start(route, handle){
 
@@ -19,25 +18,22 @@ var server = http.createServer(function(request,response){
   // response.writeHead(200, {"Content-Type": 'text/plain'});
   //----------------------------------------------------------------------------
 
-  if (request.url == '/upload' && request.method.toLowerCase() == 'post'){
-    var form = new formidable.IncomingForm();
-    form.parse(request, function(err, fields, files){
-      response.writeHead(200,{'content-type':'text/plain'});
-      response.write('received upload');
-      response.end(sys.inspect({fields: fields, files: files}));
-    });
-    return;
-  }
+  // if (request.url == '/upload' && request.method.toLowerCase() == 'post'){
+  //   var form = new formidable.IncomingForm();
+  //   form.parse(request, function(err, fields, files){
+  //     response.writeHead(200,{'content-type':'text/plain'});
+  //     response.write('received upload');
+  //     response.end(sys.inspect({fields: fields, files: files}));
+  //   });
+  //   return;
+  // }
 
-  response.writeHead(200, {'content-type': 'text/html'});
-  response.end(
-    '<form action="/upload" enctype="multipart/form-data" '+
-    'method="post">'+
-    '<input type="text" name="title"><br>'+
-    '<input type="file" name="upload" multiple="multiple"><br>'+
-    '<input type="submit" value="Upload">'+
-    '</form>'
-    )
+  var pathname = url.parse(request.url).pathname;
+  console.log("request for " + pathname + "received");
+  route(handle, pathname, response, request);
+
+
+
   //----------------------------------------------------------------------------
 
 
